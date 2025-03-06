@@ -1,0 +1,30 @@
+### Register a new user
+POST http://localhost:3000/register
+Content-Type: application/json
+
+{
+  "email": "user@example.com",
+  "password": "mypassword"
+}
+
+### Login to obtain JWT token
+# @name postLogin
+POST http://localhost:3000/login
+Content-Type: application/json
+
+{
+  "email": "user@example.com",
+  "password": "mypassword"
+}
+
+### Save the token to be used in other requests
+@token = {{postLogin.response.body.token}}
+
+### Get profile with good JWT token
+GET http://localhost:3000/profile
+Authorization: Bearer {{token}}
+
+
+### Get profile with bad JWT token
+GET http://localhost:3000/profile
+Authorization: Bearer GoodLordThisIsNotAValidToken
