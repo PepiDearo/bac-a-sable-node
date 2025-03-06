@@ -1,5 +1,7 @@
 # Guide d’Authentification en Node.js
 
+FIXME : Expliquer davantage le fonctionnement des Hash.
+
 Ce tutoriel explique comment mettre en place un système d’authentification avec
 [Node.js](https://nodejs.org), [Express](https://expressjs.com/) et
 [SQLite](https://www.sqlite.org/index.html) via [Knex](http://knexjs.org/).
@@ -98,7 +100,7 @@ app.post('/login', async (req, res) => {
 Si le mot de passe est correct, `isMatch` sera `true`. Sinon, il sera `false`.
 Encore une fois, le mot de passe en clair n’est jamais stocké en base.
 
-### 2.3. Ne pas tenter de réinventer la roue
+### 2.3. Ne pas réinventer la roue
 
 Il est important d'utiliser des bibliothèques de confiance pour le hashage des
 mots de passe. `bcrypt` est une bibliothèque bien établie et largement utilisée
