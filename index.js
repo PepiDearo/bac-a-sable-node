@@ -96,7 +96,7 @@ app.post('/login', async (req, res) => {
   }
 
   try {
-    // Chercher l'utilisateur en base
+    // Chercher l'utilisateur dans la base
     const user = await db('users').where({ email }).first();
 
     if (!user) {
