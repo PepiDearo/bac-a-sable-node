@@ -3,8 +3,19 @@ POST http://localhost:3000/register
 Content-Type: application/json
 
 {
-  "email": "user@example.com",
-  "password": "mypassword"
+  "email": "Jonathan",
+  "password": "test123"
+}
+
+
+
+###deuxieme utilisateur
+POST http://localhost:3000/register
+Content-Type: application/json
+
+{
+  "email": "Paul",
+  "password": "test123"
 }
 
 ### Login to obtain JWT token
@@ -13,9 +24,20 @@ POST http://localhost:3000/login
 Content-Type: application/json
 
 {
-  "email": "user@example.com",
-  "password": "mypassword"
+  "email": "Jonathan",
+  "password": "test123"
 }
+
+POST http://localhost:3000/login
+Content-Type: application/json
+
+{
+  "email": "Paul",
+  "password": "test123"
+}
+
+
+
 
 ### Save the token to be used in other requests
 @token = {{postLogin.response.body.token}}
@@ -25,6 +47,23 @@ GET http://localhost:3000/profile
 Authorization: Bearer {{token}}
 
 
+##remplace le {{token}} par un token generee
+
+
+
 ### Get profile with bad JWT token
 GET http://localhost:3000/profile
 Authorization: Bearer GoodLordThisIsNotAValidToken
+
+
+
+
+###route pour ajouter une couleur preferee a un utilisateur avec verification de jeton
+POST http://localhost:3000/users/2/color
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImVtYWlsIjoiUGF1bCIsImlhdCI6MTc0MTgzMjcwMiwiZXhwIjoxNzQxODM2MzAyfQ.Qf7TDxdWnxz0kuu6NLzLeTHndLiffVDhtlQoA5Ww8ss
+Content-Type: application/json
+
+{"couleur":"jaune"}
+
+##route pour get la couleur d'un utilisateur sans jeton
+GET http://localhost:3000/users/2/color

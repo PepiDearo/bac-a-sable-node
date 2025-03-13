@@ -136,6 +136,112 @@ app.get('/profile', verifyToken, async (req, res) => {
   }
 });
 
+
+
+
+
+//exercice
+//ajouter une table user_color dans index.js
+async function creationUserColor() {
+  try {
+    // verifie si la table existe deja
+    const tableExists = await db.schema.hasTable('user_color');
+
+    if (!tableExists) {
+      // creer la table si elle n'existe pas
+      await db.schema.createTable('user_color', (table) => {
+        table.increments('userid').primary();
+        table.string('couleur').notNullable();
+
+
+        table.foreign('userid').references('id').inTable('users');
+      });
+
+      console.log('Table user_color créée avec succès !');
+    } else {
+      console.log('Table user_color existe déjà.');
+    }
+  } catch (err) {
+    console.error('Erreur lors de la création de la table user_color :', err);
+  }
+}
+
+creationUserColor();
+
+
+
+//ajouter couleur pour utilisateur (modifie aussi)
+app.post('/users/:userid/color', verifyToken, async (req, res) => {
+  const { userid } = req.params;
+
+  const { couleur } = req.body;
+
+  if (!couleur) {
+    return res.status(400).json({ message: 'La couleur est requise.' });
+  }
+
+  try {
+    const compteExiste = await db('users').where({ id: userid }).first();
+    if (!compteExiste) {
+      return res.status(404).send('Compte non trouvée');
+    }
+    // Vérifier si l'utilisateur a déjà une couleur enregistrée
+    const existingColor = await db('user_color').where({ userid }).first();
+
+    if (existingColor) {
+      // Mettre à jour la couleur existante
+      await db('user_color').where({ userid }).update({ couleur });
+    } else {
+      // Insérer une nouvelle couleur
+      await db('user_color').insert({ userid, couleur });
+    }
+    res.status(200).send('Nouvelle couleur ajoute pour utilisateur');
+  } catch (err) {
+    res.status(400).send('Erreur ');
+  }
+});
+
+//get couleur pour utilisateur
+app.get('/users/:userid/color',async(req,res)=>{
+  const { userid } = req.params;
+
+  const compteExiste=await db('users').where({id: userid}).first();
+  if (!compteExiste){
+    return res.status(404).send('Compte non trouvée');
+  }else{
+    try{
+      getColor=await db('user_color').where({userid}).first();
+      res.status(200).json({ couleur: getColor.couleur });
+    }
+    catch(err){
+      res.status(404).send("Erreur")
+      console.log(err)
+    }
+  }
+
+
+
+
+
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 app.listen(3000, () => {
   console.log('Serveur démarré sur http://localhost:3000');
 });
